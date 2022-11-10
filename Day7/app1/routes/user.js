@@ -1,6 +1,7 @@
 const e = require('express')
 const express = require('express')
 const db = require('../db')
+const utils = require('../utils')
 
 const router = express.Router()
 
@@ -49,16 +50,40 @@ router.post('/signup', (request, response) => {
                        values('${firstName}', '${lastName}', '${email}', '${password}', '${phone}')`
 
     db.query(statement, (error, dbResult) => {
-        const result = { status: '', data: '', error: '' }
-        if(error){
-            result['status'] = 'error'
-            result['error'] = error
-        }
-        else{
-            result['status'] = 'success'
-            result['data'] = dbResult
-        }
-        response.send(result)
+        //const result = utils.createResult(error, dbResult)
+        //response.send(result)
+        response.send(utils.createResult(error, dbResult))
+    })
+})
+
+
+router.put('/update', (request, response) => {
+    const id = request.body.id
+    const firstName = request.body.firstName
+    const lastName = request.body.lastName
+    const email = request.body.email
+    const password = request.body.password
+    const phone = request.body.phone
+
+    // const statement = `insert into user (firstName, lastName, email, password, phone) 
+    //                    values('${firstName}', '${lastName}', '${email}', '${password}', '${phone}')`
+    
+
+    const statement = `update user set firstName = '${firstName}', lastName = '${lastName}', email = '${email}', password = '${password}', phone ='${phone}' where id = '${id}';`
+
+    db.query(statement, (error, dbResult) => {
+        //const result = utils.createResult(error, dbResult)
+        //response.send(result)
+        response.send(utils.createResult(error, dbResult))
+    })
+})
+
+
+router.delete('/', (request, response) => {
+    const id = request.body.id
+    const statement = `delete from user where id = '${id}';`
+    db.query(statement, (error, dbResult) => {
+        response.send(utils.createResult(error, dbResult))
     })
 })
 
