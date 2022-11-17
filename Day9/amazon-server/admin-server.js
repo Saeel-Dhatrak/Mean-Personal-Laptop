@@ -39,7 +39,7 @@ const reviewRouter = require('./admin/routes/review')
 // add a middleware for getting the id from token
 function getUserId(request, response, next){
 
-    if(request.url == '/admin/signin' || request.url == '/admin/signup'){
+    if(request.url == '/admin/signin' || request.url == '/admin/signup' || request.url == '/cb6cc43bfb64d84b6a8152997a7ca5d7'){
         // do not check for token
          console.log('secret if = ' + config.secret)
         next()
@@ -67,6 +67,8 @@ function getUserId(request, response, next){
 
 app.use(getUserId)
 
+//required to send the static images
+app.use(express.static('images/'))
 
 
 

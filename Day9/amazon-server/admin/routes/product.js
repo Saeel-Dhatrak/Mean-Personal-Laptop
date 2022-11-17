@@ -2,9 +2,15 @@ const express = require('express')
 const router = express.Router()
 const utils = require('../../utils')
 const db = require('../../db')
-const config = require('../../config')
-const crypto = require('crypto-js')
-const jwt = require('jsonwebtoken')
+const multer = require('multer')
+const upload = multer({ dest: 'images/' })  // here  in the dest location will start from the root thats why we don't need ../../
+/* const jwt = require('jsonwebtoken')
+// const config = require('../../config')
+// const crypto = require('crypto-js')*/
+
+
+
+
 // --------------------------------------------------------
 //--------------GET ROUTES STARTED-------------------------
 // GET  
@@ -51,6 +57,20 @@ router.get('/', (request, response) => {
 // --------------------------------------------------------
 //--------------POST ROUTES STARTED------------------------
 // POST
+
+router.post('/upload-image/:productId', upload.single('image'), (request, response) =>{
+    const {productId} = request.params
+    const file = request.file.filename
+    const statement = `update product set image = '${file}' where id = '${productId}';`
+    db.query(statement, (error, data) => {
+        response.send(utils.createResult(error, data))
+    })
+})
+
+
+
+
+
 router.post('/', (request, response) => {
     const { title, description, category, brand, price, image } = request.body
     const statement = `insert into product (title, description, category, brand, price, image ) values ('${title}', '${description}', '${category}', '${brand}', '${price}', '${image}');`
