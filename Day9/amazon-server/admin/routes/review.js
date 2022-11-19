@@ -8,17 +8,28 @@ const jwt = require('jsonwebtoken')
 // --------------------------------------------------------
 //--------------GET ROUTES STARTED-------------------------
 // GET  
-router.get('/', (request, response) => {
-    response.send()
+router.get('/:productId', (request, response) => {
+    const {productId} = request.params
+    const statement = `select id, userId, review, rating from productReviews where productId = '${productId}'`
+    db.query(statement, (error, data) => {
+        response.send(utils.createResult(error,data))
+    })
+
 })
 
 
 // --------------------------------------------------------
 //--------------POST ROUTES STARTED------------------------
 // POST
-router.post('/', (request, response) => {
-    response.send()
-})
+// router.post('/:iproductId', (request, response) => {
+//     const {productId} = request.params
+//     const {review, rating} = request.body
+//     const statement = `insert into priductReviews (review, productId, userId, rating) values 
+//     ('${review}', '${productId}', '${request.userId}', '${rating}')`
+//     db.query(statement, (error, data) => {
+//         response.send(utils.createResult(error,data))
+//     })
+// })
 
 
 // --------------------------------------------------------
@@ -32,8 +43,12 @@ router.put('/', (request, response) => {
 // --------------------------------------------------------
 //--------------DELETE ROUTES STARTED----------------------
 // DELETE
-router.delete('/', (request, response) => {
-    response.send()
+router.delete('/:id', (request, response) => {
+    const {id} = request.params
+    const statement = `delete from productReviews where id = '${id}';`
+    db.query(statement, (error, data) => {
+        response.send(utils.createResult(error, data))
+    })
 })
 
 

@@ -58,6 +58,10 @@ create table admin(
     image varchar(100),
     createdOn timestamp default current_timestamp
     );
+
+
+
+    alter table product add column isActive INTEGER DEFAULT 1;
     
     desc product;
     
@@ -83,7 +87,7 @@ create table admin(
 	createdOn timestamp default current_timestamp
 	);
     
-	create table productreviews(
+	create table productReviews(
     id integer PRIMARY KEY auto_increment,
     review varchar(1000),
     userId integer,
@@ -93,5 +97,8 @@ create table admin(
     );
      drop table productReviews;
     desc productReviews;
+
+    insert into productreviews (review, userId, productId, rating) values ('This is a worst product ever seen', 2, 1, 2);
+    insert into productreviews (review, userId, productId, rating) values ('This is a nice product1', 1, 1, 4);
     
 		

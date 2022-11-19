@@ -18,7 +18,7 @@ router.get('/', (request, response) => {
     const statement = `select p.id, p.title, p.description,
     c.id as categoryId, c.title as categoryTitle,
     b.id as brandId, b.title as brandTitle,
-    p.price, p.image from product p
+    p.price, p.image, p.isActive from product p
     inner join category c
     on c.id = p.category
     inner join brand b on b.id = p.category;`
@@ -36,6 +36,7 @@ router.get('/', (request, response) => {
                 title: tmpProduct['title'],
                 description: tmpProduct['description'],
                 price: tmpProduct['price'],
+                isActive: tmpProduct['isActive'],
                 brand: {
                     id: tmpProduct['brandId'],
                     title: tmpProduct['brandTitle']
@@ -68,9 +69,6 @@ router.post('/upload-image/:productId', upload.single('image'), (request, respon
 })
 
 
-
-
-
 router.post('/', (request, response) => {
     const { title, description, category, brand, price, image } = request.body
     const statement = `insert into product (title, description, category, brand, price, image ) values ('${title}', '${description}', '${category}', '${brand}', '${price}', '${image}');`
@@ -78,6 +76,9 @@ router.post('/', (request, response) => {
         response.send(utils.createResult(error, data))
     })
 })
+
+
+
 
 
 // --------------------------------------------------------
@@ -94,6 +95,14 @@ router.put('/:id', (request, response) => {
      brand = '${brand}'
      where id = '${id}'
     `
+    db.query(statement, (error, data) => {
+        response.send(utils.createResult(error, data))
+    })
+})
+
+router.put('/update-state/:id/:isActive', (request, response) => {
+    const { id, isActive } = request.params
+    const statement = `update product set isActive = '${isActive}' where id = '${id}';`
     db.query(statement, (error, data) => {
         response.send(utils.createResult(error, data))
     })
